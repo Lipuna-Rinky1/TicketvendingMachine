@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Token form</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><a href='/'>Home</a></td>
+            {% if user.is_authenticated %}
+            <td>Hello, {{user.username}} <a href='/logout'>Logout</a></td>
+            {% else %}
+            <td><a href='/registration'>Registration</a></td>
+            <td><a href='/login'>Login</a></td>
+            {% endif %}
+        </tr>
+    </table>
+<h2>Generate your token here</h2>
+
+<form method="post" id="tokenForm" data-doctors-url="{% url 'ajax_load_doctors' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Generate">
+    <button><a href="{% url 'delete' %}" type="submit" class="btn btn-danger">Delete</a></button>
+    <button><a href="{% url 'list' %}" type="submit" class="btn btn-info">Token list</a></button>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_department").change(function () {
+        const url = $("#tokenForm").attr("data-doctors-url");  
+        const departmentId = $(this).val();  
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    
+            data: {
+                'department_id': departmentId       
+            },
+            success: function (data) {   
+                $("#id_doctor").html(data);  
+                
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

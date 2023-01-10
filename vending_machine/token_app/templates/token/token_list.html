@@ -1,0 +1,52 @@
+<!-- <p>Helloooooo world</p> -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Token List</title>
+        <style></style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td><a href='/'>Home</a></td>
+                {% if user.is_authenticated %}
+                <td>Hello, {{user.username}} <a href='/logout'>Logout</a></td>
+                {% else %}
+                <td><a href='/registration'>Registration</a></td>
+                <td><a href='/login'>Login</a></td>
+                {% endif %}
+            </tr>
+        </table>
+        <h1>Token List</h1>
+        <p>
+            <button><a href="{% url 'generate_token' %}">Generate token</a></button>
+            <button><a href="{% url 'delete' %}" type="submit" class="btn btn-danger">Delete</a></button>
+          </p>
+        {% if token_list %}
+        <table border="1" style="width:80%">
+            <thead>
+                <th>Token</th>
+                <th>Patient Name </th>
+                <th>Department</th>
+                <th>Doctor Name</th>
+                <th>Date</th>
+            </thead>
+            {% for token in token_list %}
+                <tr>
+                    <td>{{ token.token}}</td>
+                    <td>{{ token.patient_name}}</td>
+                    <td>{{ token.department}}</td>
+                    <td>{{ token.doctor}}</td>
+                    <td>{{ token.created_date}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+                <tr>
+                <td colspan="4">No Token. <a href="{% url 'generate_token' %}">Generate token</a>.</td>
+                </tr>
+        {% endif %}
+    </body>
+
+</html>
